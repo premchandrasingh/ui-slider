@@ -75,6 +75,10 @@ angular.module('ui.slider', []).value('uiSliderConfig',{}).directive('uiSlider',
 
                 // Update model value from slider
                 elm.bind('slide', function(event, ui) {
+                   // restrict slide if gap between handles is less than minRange
+                    if(options.minRange && ui.values && (ui.values[1] - ui.values[0] < options.minRange)){
+                                return false;
+                    }
                     ngModel.$setViewValue(ui.values || ui.value);
                     scope.$apply();
                 });
