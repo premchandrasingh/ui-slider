@@ -76,8 +76,12 @@ angular.module('ui.slider', []).value('uiSliderConfig',{}).directive('uiSlider',
                 // Update model value from slider
                 elm.bind('slide', function(event, ui) {
                    // restrict slide if gap between handles is less than minRange
-                    if(options.minRange && ui.values && (ui.values[1] - ui.values[0] < options.minRange)){
-                                return false;
+                    if(options.minRange){
+                       if(ui.values && (ui.values[1] - ui.values[0] < options.minRange)){
+                         angular.element(elm[0]).addClass('min-range');
+                         return false;
+                       }
+                       angular.element(elm[0]).removeClass('min-range');
                     }
                     ngModel.$setViewValue(ui.values || ui.value);
                     scope.$apply();
@@ -92,7 +96,7 @@ angular.module('ui.slider', []).value('uiSliderConfig',{}).directive('uiSlider',
                         ngModel.$viewValue = 0;
                     }
                     else if (options.range && !angular.isDefined(ngModel.$viewValue)) {
-                            ngModel.$viewValue = [0,0];
+                            ngModel.$viewValue = [0, options.minRange || 0];
                     }
 
                     // Do some sanity check of range values
